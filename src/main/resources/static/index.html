@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>Gateway (development only)</h3>
+
+<h5>routes</h5>
+<a href="http://localhost:8080/actuator/gateway/routes">routes</a> <p/>
+
+
+<h5>filters</h5>
+<a href="http://localhost:8080/actuator/gateway/routefilters">routeFilters</a>  <p/>
+<a href="http://localhost:8080/actuator/gateway/globalFilters">globalFilters</a><p/>
+
+
+<h5>examples</h5>
+<a href="http://localhost:8080/get">/get -> httpbin.org/get</a>  <p/>
+<a href="http://localhost:8080/profile">/profile -> 'RESOURCE Server'</a>  <p/>
+
+<button id="login_john" onclick="login_john()">Login (John)</button>
+
+<script>
+    function login_john() {
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", "Basic Y2xpZW50OnNlY3JldA==");
+        myHeaders.append("Cookie", "JSESSIONID=563849E078251E6C014A2228FE127F00");
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("http://localhost:8080/oauth/token?grant_type=password&username=john&password=12345&scope=read", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+    }
+</script>
+
+</body>
+</html>
