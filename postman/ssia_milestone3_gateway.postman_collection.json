@@ -1,0 +1,420 @@
+{
+	"info": {
+		"_postman_id": "0381b872-64af-42e4-be36-1e83957f840d",
+		"name": "ssia_milestone3",
+		"description": "spring gateway to validate oauth2 token",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GATEWAY : /httpbin/** routes to httpbin.org/**",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9825040f-e559-4c51-b918-14e74e5ed265",
+						"exec": [
+							"pm.test(\"Expecting Status code of 200, was \"+ pm.response.code, function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							" "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/httpbin/get",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"httpbin",
+						"get"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GATEWAY : /api/profile/admin (fail no access token)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6e243d17-6498-4481-bd76-975d8323f5a5",
+						"exec": [
+							"",
+							"pm.test(\"Expecting Status code of 401, was \"+ pm.response.code, function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							" ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/api/profile/admin",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"profile",
+						"admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RESOURCE: /profile/admin (fail no access token)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3f1144d1-8fd6-4fd6-9b25-daa85dea82b9",
+						"exec": [
+							"",
+							"pm.test(\"Expecting Status code of 401, was \"+ pm.response.code, function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							" ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "localhost:7070/profile/admin",
+					"host": [
+						"localhost"
+					],
+					"port": "7070",
+					"path": [
+						"profile",
+						"admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OAUTH password-grant admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5f0045ba-2b73-4317-a0c3-186216e0108b",
+						"exec": [
+							"",
+							"pm.test(\"Expecting Status code of 200, was \"+ pm.response.code, function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"save tokens\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    console.log(\"Saving access token in response to 'token' environmental variable: \" + jsonData.access_token)",
+							"    pm.environment.set(\"access_token\", jsonData.access_token);",
+							"    pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "secret",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "client",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "localhost:9191/oauth/token?grant_type=password&username=admin&password=secret2&scope=read",
+					"host": [
+						"localhost"
+					],
+					"port": "9191",
+					"path": [
+						"oauth",
+						"token"
+					],
+					"query": [
+						{
+							"key": "grant_type",
+							"value": "password"
+						},
+						{
+							"key": "username",
+							"value": "admin"
+						},
+						{
+							"key": "password",
+							"value": "secret2"
+						},
+						{
+							"key": "scope",
+							"value": "read"
+						}
+					]
+				},
+				"description": "The client requests an authorization token on behalf of a user "
+			},
+			"response": []
+		},
+		{
+			"name": "RESOURCE: /profile/admin (success)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5b7962d1-76eb-4c3d-9572-5487ba5132ce",
+						"exec": [
+							"",
+							"pm.test(\"Expecting Status code of 200, was \"+ pm.response.code, function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							" ",
+							"",
+							"pm.test(\"Body contains string\",() => {",
+							"  pm.expect(pm.response.text()).to.include(\"admin\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "localhost:7070/profile/admin",
+					"host": [
+						"localhost"
+					],
+					"port": "7070",
+					"path": [
+						"profile",
+						"admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GATEWAY : /api/profile/admin (success)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cd7d6d0e-bc1a-45d2-993c-b380fa6d0dc8",
+						"exec": [
+							"",
+							"pm.test(\"Expecting Status code of 200, was \"+ pm.response.code, function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							" ",
+							"",
+							"pm.test(\"Body contains string\",() => {",
+							"  pm.expect(pm.response.text()).to.include(\"admin\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/api/profile/admin",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"profile",
+						"admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GATEWAY /api/metric/admin (with admin token) ->success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e6b23117-7bea-4c4f-ba5e-5b0e54c8a99c",
+						"exec": [
+							"",
+							"pm.test(\"Expecting Status code of 200, was \"+ pm.response.code, function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							" ",
+							" ",
+							"pm.test(\"Body contains string\",() => {",
+							"  pm.expect(pm.response.text()).to.include(\"HEART_RATE\");",
+							"});",
+							" "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/api/metric/admin",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"metric",
+						"admin"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
