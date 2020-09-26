@@ -8,10 +8,10 @@
         <version>2.3.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.manning.ssia</groupId>
-    <artifactId>gateway</artifactId>
+    <groupId>com.manning.ssia.milestone3</groupId>
+    <artifactId>spring-gateway</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>gateway</name>
+    <name>milestone3-spring-gateway</name>
     <description>Spring gateway - validate Request with OAuth tokens before forwarding to resource server</description>
 
     <properties>
