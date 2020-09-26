@@ -17,17 +17,19 @@ public class RouteConfig {
     public RouteLocator myRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
                 // Add a simple re-route from: /get to: http://httpbin.org:80
-                .route("get", p -> p
-                        .path("/get") // intercept calls to the /demo path
-                        .filters(f -> f.addRequestHeader("Hello", "World")) // add header
+                .route("httpbin", p -> p
+                        .path(true, "/httpbin/**") // intercept calls to the /demo path
+                       // .filters(f -> f.addRequestHeader("Hello", "World")) // add header
+                        .filters(f -> f.stripPrefix( 1)) // strip the "/httpbin" prefix
                         .uri("http://httpbin.org:80")) // forward to httpbin
 //                .route("oauth-server", p -> p
 //                        .path("/oauth")
 //                        .uri("http://localhost:9191"))
                 .route("resource-server", p -> p
-                        .path("/profile/**", "/metric/**")
+                        .path("/api/**")
  //                       .filters(f -> f.filter(filterFactory.apply())) // forward oauth filters
-                        .uri("http://localhost:7070"))
+                          .filters(f -> f.stripPrefix( 1)) // strip the "/httpbin" prefix
+                          .uri("http://localhost:7070"))
                 .build();
     }
 }
