@@ -5,10 +5,14 @@
 tasks:
   - before: mvn install -DskipTests=true
 
-  - init: mvn verify
+  - init: ls target
 
   - command: mvn spring-boot:run
 
+
+ports:
+  - port: 8080
+    onOpen: open-browser
 
 github:
   prebuilds:
