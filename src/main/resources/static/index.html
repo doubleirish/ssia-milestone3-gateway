@@ -8,17 +8,17 @@
 <h3>Gateway (development only)</h3>
 
 <h5>routes</h5>
-<a href="http://localhost:8080/actuator/gateway/routes">routes</a> <p/>
+<a href="/actuator/gateway/routes">routes</a> <p/>
 
 
 <h5>filters</h5>
-<a href="http://localhost:8080/actuator/gateway/routefilters">routeFilters</a>  <p/>
-<a href="http://localhost:8080/actuator/gateway/globalFilters">globalFilters</a><p/>
+<a href="/actuator/gateway/routefilters">routeFilters</a>  <p/>
+<a href="/actuator/gateway/globalFilters">globalFilters</a><p/>
 
 
 <h5>examples</h5>
-<a href="http://localhost:8080/get">/get -> httpbin.org/get</a>  <p/>
-<a href="http://localhost:8080/profile">/profile -> 'RESOURCE Server'</a>  <p/>
+<a href="/get">/get -> httpbin.org/get</a>  <p/>
+<a href="/profile">/profile -> 'RESOURCE Server'</a>  <p/>
 
 <button id="login_john" onclick="login_john()">Login (John)</button>
 
@@ -35,7 +35,7 @@
             redirect: 'follow'
         };
 
-        fetch("http://localhost:8080/oauth/token?grant_type=password&username=john&password=12345&scope=read", requestOptions)
+        fetch("/oauth/token?grant_type=password&username=john&password=12345&scope=read", requestOptions)
             .then(response => response.text())
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
