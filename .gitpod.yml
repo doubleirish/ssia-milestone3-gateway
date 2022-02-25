@@ -5,4 +5,9 @@
 tasks:
   - init: mvn install -DskipTests=false
 
+github:
+  prebuilds:
+    # enable for the default branch (defaults to true)
+    master: true  
+
 
