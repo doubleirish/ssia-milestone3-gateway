@@ -4,8 +4,8 @@
 
 tasks:
   - before: mvn install -DskipTests=true
-
-  - init: ls target
+  
+  - init: mvn validate
 
   - command: mvn spring-boot:run
 
